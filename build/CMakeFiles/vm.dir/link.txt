@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\vm.dir/objects.a
+C:\PROGRA~1\CODEBL~1\MinGW\bin\ar.exe qc CMakeFiles\vm.dir/objects.a @CMakeFiles\vm.dir\objects1.rsp
+C:\PROGRA~1\CODEBL~1\MinGW\bin\C__~1.EXE -Wl,--whole-archive CMakeFiles\vm.dir/objects.a -Wl,--no-whole-archive -o vm.exe -Wl,--out-implib,libvm.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\vm.dir\linkLibs.rsp

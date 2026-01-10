@@ -1,0 +1,4 @@
+C:/Users/ahmed/Desktop/system-virtual-machine/build/CMakeFiles/vm.dir
+C:/Users/ahmed/Desktop/system-virtual-machine/build/CMakeFiles/run.dir
+C:/Users/ahmed/Desktop/system-virtual-machine/build/CMakeFiles/edit_cache.dir
+C:/Users/ahmed/Desktop/system-virtual-machine/build/CMakeFiles/rebuild_cache.dir
