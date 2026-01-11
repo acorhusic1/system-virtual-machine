@@ -5,7 +5,9 @@
 class CPU {
 public:
     static const Word INTERRUPT_VECTOR = 4; // Standardna adresa za tajmer interapt u SVEU16
-    bool interruptsEnabled = true;
+    bool interruptsEnabled = false;
+    bool interruptPending = false;
+    uint32_t tickCount = 0;
     void handleInterrupt(); // Metoda koja vrši skok na ISR
     
     // SVEU16 ima 16 registara (R0-R15)

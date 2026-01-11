@@ -1,11 +1,15 @@
 #pragma once
 #include "common.h"
+#include "disk.h"
+#include "video.h"
 #include <vector>
 #include <string>
 
 class Memory {
 private:
     std::vector<Word> data;
+    DiskDevice disk;    // Disk uređaj
+    VideoDevice video;  // Video uređaj (80x25)
 
 public:
     Memory();

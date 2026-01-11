@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h> // For clearing the console
 #include "memory.h"
 #include "cpu.h"
 
@@ -19,15 +20,10 @@ int main(int argc, char* argv[]) {
     // 2. Inicijalizacija CPU-a sa memorijom
     CPU cpu(ram);
 
-    // TEST: Ručno upisujemo instrukcije koje kažu:
-    ram.write(8192, 72); // 'H'
-    ram.write(8193, 69); // 'E'
-    ram.write(8194, 76); // 'L'
-    ram.write(8195, 76); // 'L'
-    ram.write(8196, 79); // 'O'
 
     // 3. Pokretanje CPU-a
     std::cout << "CPU Start..." << std::endl;
+    system("cls");
     try {
         cpu.run();
     } catch (const std::exception& e) {

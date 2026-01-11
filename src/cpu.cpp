@@ -1,7 +1,9 @@
 #include "cpu.h"
+#include "keyboard.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <conio.h> // For _kbhit() and _getch()
 
 // Pomoćne funkcije za tajming
 using namespace std::chrono;
@@ -14,11 +16,17 @@ void CPU::reset() {
     for (int i = 0; i < 16; i++) R[i] = 0;
     FLAGS = 0;
     running = true;
+    interruptPending = false;
+    tickCount = 0;
     // R15 je PC, on kreće od 0 (gdje je ROM)
     R[15] = 0; 
+    R[2] = 0x7000;
+    R[3] = 0x7F00;  
 }
 
 void CPU::run() {
+    Keyboard keyboard(memory); // Create a Keyboard instance
+    
     static void* dispatch_table[] = {
         &&op_lod, &&op_add, &&op_sub, &&op_and,
         &&op_ora, &&op_xor, &&op_shr, &&op_mul,
@@ -34,24 +42,28 @@ void CPU::run() {
 next_instruction:
     if (!running) return;
 
+    // Process keyboard input
+    keyboard.processInput();
+
     // --- LOGIKA ZA INTERAPTE (Svakih 20ms) ---
     auto now = steady_clock::now();
     if (duration_cast<milliseconds>(now - last_interrupt).count() >= 20) {
         last_interrupt = now;
-        //if (interruptsEnabled) {
-        //    interruptsEnabled = false; // Ugasi prekide dok traje obrada
-            handleInterrupt(); // Pozivamo prekid
-            // Nakon prekida, nastavljamo sa nove adrese (PC je promijenjen u handleInterrupt)
-        //}
+        interruptPending = true;
     }
 
-/*
     // --- FREQUENCY LIMITER (1 MHz) ---
-    // Poboljšano: ne koristiti while petlju za svaku instrukciju jer je presporo
-    // Bolje je provjeriti svakih 100 instrukcija, ali za preciznost ostavljamo ovako
-    while (steady_clock::now() - last_cycle < cycle_duration);
-    last_cycle = steady_clock::now();
-*/
+    // Čekaj dok ne prođe 1 mikrosekunda od zadnjeg ciklusa
+    auto target = last_cycle + cycle_duration;
+    std::this_thread::sleep_until(target);
+    last_cycle = target;
+
+    if (interruptPending) {
+        interruptPending = false;
+        tickCount++;
+    
+        goto next_instruction; // ovo “pojede” jedan ciklus
+    }
 
     // FETCH & DECODE
     Word ir = memory.read(R[15]++);
@@ -71,10 +83,9 @@ next_instruction:
 
     op_lod: 
         // Ako čitamo sa adrese na koju pokazuje PC, to je konstanta
-        if (src2 == 15) {
-            R[dest] = memory.read(R[15]++); 
-        } else {
-            R[dest] = memory.read(R[src2]);
+        R[dest] = memory.read(R[src2]);
+        if (src2 == 15 && dest != 15) {
+            R[15]++;
         }
         goto next_instruction;
     op_add: R[dest] = R[src1] + R[src2]; goto next_instruction;
@@ -94,27 +105,26 @@ next_instruction:
     op_mul: R[dest] = R[src1] * R[src2]; goto next_instruction;
     op_sto: 
         // Ako pišemo na adresu na koju pokazuje PC, to je direktno adresiranje
+        memory.write(R[src2], R[src1]);
+
+        // poravnanje:
         if (src2 == 15) {
-            memory.write(memory.read(R[15]++), R[src1]);
-        } else {
-            memory.write(R[src2], R[src1]);
-        }
+            R[15]++; // preskoči "extra word"
+        } 
+
         R[dest] = R[src1]; 
         goto next_instruction;
-    op_mif: if (R[src1] != 0) R[dest] = R[src2]; goto next_instruction;
+    op_mif:
+        if (R[src1] != 0) R[dest] = src2; 
+        goto next_instruction;
     op_gtu: R[dest] = (R[src1] > R[src2]); goto next_instruction;
     op_gts: R[dest] = ((int16_t)R[src1] > (int16_t)R[src2]); goto next_instruction;
     op_ltu: R[dest] = (R[src1] < R[src2]); goto next_instruction;
     op_lts: R[dest] = ((int16_t)R[src1] < (int16_t)R[src2]); goto next_instruction;
     op_equ: R[dest] = (R[src1] == R[src2]); goto next_instruction;
     op_maj: 
-        if (src2 == 15) {
-            // Skok na konstantu koja slijedi u memoriji
-            R[15] = memory.read(R[15]); 
-        } else {
-            R[15] = R[src2];
-        }
-        R[dest] = R[src1]; // SVEU16 specifičnost: dest dobija vrijednost src1 pri skoku
+        R[dest] = R[src1];
+        R[15]   = R[src2]; 
         goto next_instruction;
 }
 
