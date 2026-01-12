@@ -17,8 +17,6 @@ DiskDevice::DiskDevice(const std::string& filename)
     
     // Osiguraj da disk fajl postoji
     ensureDiskFileExists();
-    
-    std::cout << "[DISK] Inicijaliziran: " << diskFileName << std::endl;
 }
 
 // ============================================================================
@@ -30,7 +28,6 @@ void DiskDevice::reset() {
     bufferIndex = 0;
     sectorLoaded = false;
     std::fill(sectorBuffer.begin(), sectorBuffer.end(), 0);
-    std::cout << "[DISK] Reset" << std::endl;
 }
 
 // ============================================================================
@@ -51,18 +48,17 @@ void DiskDevice::writePort(Word port, Word value) {
                     // Učitaj odabrani sektor u buffer
                     loadSector();
                     bufferIndex = 0;  // Resetuj index za čitanje
-                    std::cout << "[DISK] READ sektor " << currentSector << std::endl;
                     break;
                     
                 case CMD_WRITE:
                     // Spremi buffer na disk
                     saveSector();
                     bufferIndex = 0;  // Resetuj index za sljedeću operaciju
-                    std::cout << "[DISK] WRITE sektor " << currentSector << std::endl;
                     break;
                     
                 default:
-                    std::cerr << "[DISK] Nepoznata komanda: " << value << std::endl;
+                    // Nepoznata komanda: tiho ignoriraj (može biti normalno pri inicijalizaciji)
+                    break;
             }
             break;
         
@@ -82,6 +78,9 @@ void DiskDevice::writePort(Word port, Word value) {
             if (bufferIndex < SECTOR_SIZE) {
                 sectorBuffer[bufferIndex++] = value;
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -174,8 +173,6 @@ void DiskDevice::ensureDiskFileExists() {
     }
     
     // Kreiraj novi prazan disk fajl
-    std::cout << "[DISK] Kreiram novi disk fajl: " << diskFileName << std::endl;
-    
     std::ofstream newFile(diskFileName, std::ios::binary);
     if (!newFile) {
         std::cerr << "[DISK] Greska pri kreiranju disk fajla!" << std::endl;
@@ -187,5 +184,4 @@ void DiskDevice::ensureDiskFileExists() {
     newFile.write(reinterpret_cast<char*>(emptyData.data()), emptyData.size() * sizeof(Word));
     
     newFile.close();
-    std::cout << "[DISK] Kreiran disk velicine " << (TOTAL_SECTORS * SECTOR_SIZE * 2 / 1024) << " KB" << std::endl;
 }

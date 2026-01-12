@@ -1,9 +1,6 @@
 #include "video.h"
 #include <iostream>
-
-// ============================================================================
-// KONSTRUKTOR I DESTRUKTOR
-// ============================================================================
+#include <windows.h>
 
 VideoDevice::VideoDevice() : hConsole(NULL), initialized(false) {
 }
@@ -12,10 +9,6 @@ VideoDevice::~VideoDevice() {
     // Konzola se automatski zatvara sa programom
 }
 
-// ============================================================================
-// INICIJALIZACIJA KONZOLE
-// ============================================================================
-
 void VideoDevice::init() {
     if (initialized) return;
     
@@ -23,7 +16,7 @@ void VideoDevice::init() {
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     
     if (hConsole == INVALID_HANDLE_VALUE) {
-        std::cerr << "[VIDEO] Greska: Ne mogu dobiti handle konzole!" << std::endl;
+        std::cerr << "[VIDEO] Greška: Ne mogu dobiti handle konzole!" << std::endl;
         return;
     }
     
@@ -45,12 +38,7 @@ void VideoDevice::init() {
     clearScreen();
     
     initialized = true;
-    std::cout << "[VIDEO] Inicijaliziran 80x25 mod" << std::endl;
 }
-
-// ============================================================================
-// POSTAVLJANJE KURSORA
-// ============================================================================
 
 void VideoDevice::setCursor(int row, int col) {
     if (!initialized || hConsole == NULL) return;
@@ -65,10 +53,6 @@ void VideoDevice::setCursor(int row, int col) {
     SetConsoleCursorPosition(hConsole, position);
 }
 
-// ============================================================================
-// ISPISIVANJE KARAKTERA NA POZICIJU
-// ============================================================================
-
 void VideoDevice::writeChar(Word address, Word value) {
     // Provjeri da li je adresa u video memoriji
     if (address < VIDEO_START_ADDR || address >= VIDEO_START_ADDR + VIDEO_SIZE) {
@@ -80,6 +64,15 @@ void VideoDevice::writeChar(Word address, Word value) {
         init();
     }
     
+    // DEBUG: Ispiši prvih nekoliko upisa
+    static int write_count = 0;
+    if (write_count < 50) {
+        std::cerr << "[VIDEO] Pisanje na adresu 0x" << std::hex << address 
+                  << " vrijednost 0x" << value << " ('" << (char)(value >= 32 && value < 127 ? value : '?') 
+                  << "')" << std::dec << std::endl;
+        write_count++;
+    }
+    
     // Izračunaj poziciju
     int row = addressToRow(address);
     int col = addressToCol(address);
@@ -87,20 +80,21 @@ void VideoDevice::writeChar(Word address, Word value) {
     // Postavi kursor na tu poziciju
     setCursor(row, col);
     
-    // Ispiši karakter
+    // Ispiši karakter DIREKTNO u konzolu
     if (value >= 32 && value < 127) {
         // Printable ASCII
         std::cout << (char)value << std::flush;
     } else if (value == 0 || value == 32) {
         // Prazno (space)
         std::cout << ' ' << std::flush;
+    } else if (value == 10) {
+        // Line feed - prijeđi u novi red
+        std::cout << std::endl;
+    } else if (value == 13) {
+        // Carriage return - vrati se na početak reda
+        std::cout << '\r' << std::flush;
     }
-    // Novi red (10, 13) se ignoriše u grid modu — pozicija je određena adresom
 }
-
-// ============================================================================
-// BRISANJE EKRANA
-// ============================================================================
 
 void VideoDevice::clearScreen() {
     if (!initialized || hConsole == NULL) return;
@@ -120,10 +114,6 @@ void VideoDevice::clearScreen() {
     // Vrati kursor na početak
     SetConsoleCursorPosition(hConsole, topLeft);
 }
-
-// ============================================================================
-// POMOĆNE FUNKCIJE — Konverzija adrese u red/kolonu
-// ============================================================================
 
 int VideoDevice::addressToRow(Word address) {
     // Formula: red = (adresa - 8192) / 80

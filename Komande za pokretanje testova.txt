@@ -1,0 +1,34 @@
+##### TEST 1 - Osnovne CPU instrukcije #####
+g++ -I../include -o test_basic_cpu ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_basic_cpu.cpp
+
+./test_basic_cpu
+
+
+##### TEST 2 - Aritmetičke instrukcije #####
+g++ -I../include -o test_arithmetic ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_arithmetic.cpp
+
+./test_arithmetic
+
+
+##### TEST 3 - Upisivanje "HELLO" u video memoriju #####
+g++ -I../include -o test_cpu_hello ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_cpu_hello.cpp
+
+./test_cpu_hello
+
+
+##### TEST 4 - Testiranje disk IO (ulaza / izlaza) #####
+g++ -I../include -o test_disk_io ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_disk_io.cpp
+
+./test_disk_io
+
+
+##### TEST 5 - Učitavanje forth.mem programa #####
+g++ -I../include -o test_load_mem ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_load_mem.cpp
+
+./test_load_mem
+
+
+##### TEST 6 - Memorija i video ispis #####
+g++ -I../include -o test_video_output ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_video_output.cpp
+
+./test_video_output
