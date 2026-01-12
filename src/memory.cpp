@@ -68,7 +68,7 @@ Word Memory::read(Word address) {
                 break;
             }
             
-            // PORT 0xFF03: Caps Lock, A-L, ;, ", Ž
+            // PORT 0xFF03: Caps Lock, A-L, ;, ", z
             case 0xFF03: {
                 if (GetAsyncKeyState(VK_CAPITAL) & 0x0001) mask |= (1 << 0);  // Caps Lock (toggle state)
                 if (GetAsyncKeyState('A') & 0x8000) mask |= (1 << 1);
@@ -82,7 +82,7 @@ Word Memory::read(Word address) {
                 if (GetAsyncKeyState('L') & 0x8000) mask |= (1 << 9);
                 if (GetAsyncKeyState(VK_OEM_1) & 0x8000) mask |= (1 << 10);  // ;
                 if (GetAsyncKeyState(VK_OEM_7) & 0x8000) mask |= (1 << 11);  // "
-                if (GetAsyncKeyState(VK_OEM_3) & 0x8000) mask |= (1 << 12);  // Ž (aproksimacija)
+                if (GetAsyncKeyState(VK_OEM_3) & 0x8000) mask |= (1 << 12);  // z (aproksimacija)
                 break;
             }
             
@@ -127,12 +127,12 @@ Word Memory::read(Word address) {
 }
 
 void Memory::write(Word address, Word value) {
-    // ROM ZAŠTITA - ROM je read-only (adrese 0-2047)
+    // ROM ZAsTITA - ROM je read-only (adrese 0-2047)
     if (address < 2048) {
-        return;  // ROM je zaštićen
+        return;  // ROM je zasticen
     }
 
-    // VIDEO RAM (Specifikacija: adresa 8192, 1 riječ = 1 ASCII)
+    // VIDEO RAM (Specifikacija: adresa 8192, 1 rijec = 1 ASCII)
     if (address >= 8192 && address < 10192) {
         video.writeChar(address, value);
         data[address] = value;

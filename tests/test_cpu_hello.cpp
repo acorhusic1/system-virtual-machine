@@ -3,35 +3,38 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <cstdlib>
 
 int main() {
-    std::cout << "=== BASIC CPU TEST ===" << std::endl;
+    std::cout << "=== TEST HELLO ===" << std::endl;
     
     Memory mem;
     Word* raw = mem.getRawPointer(0);
+
+    system("cls");
     
     // Jednostavan program:
-    // 1. Upiši 'H' (0x48) na video memoriju adresu 0x2000
-    // 2. Upiši 'E' (0x45) na 0x2001
-    // 3. Upiši 'L' (0x4C) na 0x2002
-    // 4. Upiši 'L' (0x4C) na 0x2003
-    // 5. Upiši 'O' (0x4F) na 0x2004
+    // 1. Upisi 'H' (0x48) na video memoriju adresu 0x2000
+    // 2. Upisi 'E' (0x45) na 0x2001
+    // 3. Upisi 'L' (0x4C) na 0x2002
+    // 4. Upisi 'L' (0x4C) na 0x2003
+    // 5. Upisi 'O' (0x4F) na 0x2004
     // 6. Infinite loop
     
     int pc = 0;
     
-    // LOD R5, R15, R15  - učitaj 'H' u R5 (LOD = 0x0)
+    // LOD R5, R15, R15  - ucitaj 'H' u R5 (LOD = 0x0)
     raw[pc++] = 0x05FF;  // op=0, dest=R5, src1=R15, src2=R15
     raw[pc++] = 0x0048;  // data: 'H'
     
-    // LOD R6, R15, R15  - učitaj adresu 0x2000 u R6
+    // LOD R6, R15, R15  - ucitaj adresu 0x2000 u R6
     raw[pc++] = 0x06FF;
     raw[pc++] = 0x2000;  // video memory start
     
     // STO R5, R5, R6    - spremi R5 na adresu u R6 (STO = 0x8)
     raw[pc++] = 0x8556;
     
-    // LOD R5, R15, R15  - učitaj 'E'
+    // LOD R5, R15, R15  - ucitaj 'E'
     raw[pc++] = 0x05FF;
     raw[pc++] = 0x0045;
     
@@ -41,7 +44,7 @@ int main() {
     // STO R5, R5, R6    - spremi 'E'
     raw[pc++] = 0x8556;
     
-    // LOD R5, R15, R15  - učitaj 'L'
+    // LOD R5, R15, R15  - ucitaj 'L'
     raw[pc++] = 0x05FF;
     raw[pc++] = 0x004C;
     
@@ -51,7 +54,7 @@ int main() {
     // STO R5, R5, R6
     raw[pc++] = 0x8556;
     
-    // LOD R5, R15, R15  - još jedno 'L'
+    // LOD R5, R15, R15  - jos jedno 'L'
     raw[pc++] = 0x05FF;
     raw[pc++] = 0x004C;
     
@@ -74,9 +77,6 @@ int main() {
     // Infinite loop: ORA R15, R15, R15 (stay at same address)
     int loop_addr = pc;
     raw[pc++] = 0x4FFF;  // ORA R15, R15, R15
-    
-    std::cout << "Program loaded (" << pc << " words)" << std::endl;
-    std::cout << "\nExpected output: HELLO\n" << std::endl;
     
     CPU cpu(mem);
     

@@ -6,8 +6,8 @@
  * TEST 1: Osnovne CPU instrukcije
  * 
  * Testira:
- * - Mogu li instrukcije biti izvršene?
- * - Da li registri čuvaju vrednosti?
+ * - Mogu li instrukcije biti izvrsene?
+ * - Da li registri cuvaju vrednosti?
  * - Da li memory read/write radi?
  * 
  * Kako pokrenuti:
@@ -24,50 +24,50 @@ int main() {
     
     // TEST 1a: Registri su resetovani
     std::cout << "\n[TEST 1a] Inicijalni registri:" << std::endl;
-    std::cout << "R[0] = " << cpu.R[0] << " (očekuje: 0)" << std::endl;
-    std::cout << "R[15] = " << cpu.R[15] << " (očekuje: 0, Program Counter)" << std::endl;
+    std::cout << "R[0] = " << cpu.R[0] << " (ocekuje: 0)" << std::endl;
+    std::cout << "R[15] = " << cpu.R[15] << " (ocekuje: 0, Program Counter)" << std::endl;
     assert(cpu.R[0] == 0);
     assert(cpu.R[15] == 0);
-    std::cout << "✓ PASS" << std::endl;
+    std::cout << "PASS" << std::endl;
     
-    // TEST 1b: Memorija čitanja
-    std::cout << "\n[TEST 1b] Čitanje memorije:" << std::endl;
-    mem.write(10000, 0xABCD);  // Upiši test vrednost (van ROM-a)
+    // TEST 1b: Memorija citanja
+    std::cout << "\n[TEST 1b] citanje memorije:" << std::endl;
+    mem.write(10000, 0xABCD);  // Upisi test vrijednost (van ROM-a)
     Word val = mem.read(10000);
-    std::cout << "Upisan: 0xABCD, Pročitan: 0x" << std::hex << val << std::dec << std::endl;
+    std::cout << "Upisan: 0xABCD, Procitan: 0x" << std::hex << val << std::dec << std::endl;
     assert(val == 0xABCD);
-    std::cout << "✓ PASS" << std::endl;
+    std::cout << "PASS" << std::endl;
     
     // TEST 1c: Video memorija
     std::cout << "\n[TEST 1c] Video memorija (80x25):" << std::endl;
     std::cout << "VIDEO_START_ADDR = 8192 (0x" << std::hex << VideoDevice::VIDEO_START_ADDR 
               << std::dec << ")" << std::endl;
     std::cout << "VIDEO_SIZE = " << VideoDevice::VIDEO_SIZE 
-              << " (80 × 25)" << std::endl;
+              << " (80 x 25)" << std::endl;
     assert(VideoDevice::VIDEO_START_ADDR == 8192);
     assert(VideoDevice::VIDEO_SIZE == 2000);
-    std::cout << "✓ PASS" << std::endl;
+    std::cout << "PASS" << std::endl;
     
     // TEST 1d: Disk struktura
     std::cout << "\n[TEST 1d] Disk parametri:" << std::endl;
-    std::cout << "SECTOR_SIZE = " << DiskDevice::SECTOR_SIZE << " riječi (512 bajtova)" << std::endl;
+    std::cout << "SECTOR_SIZE = " << DiskDevice::SECTOR_SIZE << " rijeci (512 bajtova)" << std::endl;
     std::cout << "TOTAL_SECTORS = " << DiskDevice::TOTAL_SECTORS << std::endl;
     std::cout << "Kapacitet = " << (DiskDevice::SECTOR_SIZE * DiskDevice::TOTAL_SECTORS * 2 / 1024) 
               << " KB" << std::endl;
     assert(DiskDevice::SECTOR_SIZE == 256);
     assert(DiskDevice::TOTAL_SECTORS == 256);
-    std::cout << "✓ PASS" << std::endl;
+    std::cout << "PASS" << std::endl;
     
     // TEST 1e: Registri za Stack
     std::cout << "\n[TEST 1e] Stack registri:" << std::endl;
     std::cout << "R[2] = " << cpu.R[2] << " (Data Stack, trebalo bi: 8192)" << std::endl;
     std::cout << "R[3] = " << cpu.R[3] << " (Return Stack)" << std::endl;
     // R[2] bi trebao biti 8192 prema reset() funkciji
-    std::cout << "ℹ Data Stack pointer je inicijalizovan na 8192" << std::endl;
-    std::cout << "✓ PASS" << std::endl;
+    std::cout << "Data Stack pointer je inicijalizovan na 8192" << std::endl;
+    std::cout << "PASS" << std::endl;
     
-    std::cout << "\n========== SVI TESTOVI PROŠLI ==========" << std::endl;
-    std::cout << "Zaključak: Osnovne strukture CPU, memorije i periferije rade!" << std::endl;
+    std::cout << "\n========== SVI TESTOVI PROsLI ==========" << std::endl;
+    std::cout << "Zakljucak: Osnovne strukture CPU, memorije i periferije rade!" << std::endl;
     
     return 0;
 }

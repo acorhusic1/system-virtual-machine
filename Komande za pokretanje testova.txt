@@ -4,7 +4,7 @@ g++ -I../include -o test_basic_cpu ../src/cpu.cpp ../src/memory.cpp ../src/disk.
 ./test_basic_cpu
 
 
-##### TEST 2 - Aritmetičke instrukcije #####
+##### TEST 2 - Aritmeticke instrukcije #####
 g++ -I../include -o test_arithmetic ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_arithmetic.cpp
 
 ./test_arithmetic
@@ -22,7 +22,7 @@ g++ -I../include -o test_disk_io ../src/cpu.cpp ../src/memory.cpp ../src/disk.cp
 ./test_disk_io
 
 
-##### TEST 5 - Učitavanje forth.mem programa #####
+##### TEST 5 - Ucitavanje forth.mem programa #####
 g++ -I../include -o test_load_mem ../src/cpu.cpp ../src/memory.cpp ../src/disk.cpp ../src/keyboard.cpp ../src/video.cpp ../tests/test_load_mem.cpp
 
 ./test_load_mem

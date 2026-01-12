@@ -5,15 +5,34 @@
 Keyboard::Keyboard(Memory& memory) : memory(memory), cursor(VideoDevice::VIDEO_START_ADDR) {}
 
 void Keyboard::processInput() {
-    // NE-BLOCKING pristup: Keyboard input se čita kroz GetAsyncKeyState()
-    // u Memory::read() za portove 0xFF00-0xFF05
-    // 
-    // Ovaj kod VIŠE NE TREBA jer FORTH direktno čita tastaturne portove!
-    // Ostavljeno za kompatibilnost, ali NE radi ništa osim čitanja iz konzole
-    
-    // Možemo ovdje dodati dodatnu funkcionalnost za debugging ako želimo
+    // Aktivno čitanje tastaturnih karaktera i ispis na ekran
     if (_kbhit()) {
         char key = _getch();
-        // Ne obrađuj ništa - FORTH će sam čitati tastaturne portove
+        
+        switch (key) {
+            case '\b': // Backspace
+                if (cursor > VideoDevice::VIDEO_START_ADDR) {
+                    cursor--;
+                    memory.write(cursor, ' ');
+                }
+                break;
+            
+            case '\r': // Enter
+                cursor += VideoDevice::COLS - ((cursor - VideoDevice::VIDEO_START_ADDR) % VideoDevice::COLS);
+                if (cursor >= VideoDevice::VIDEO_START_ADDR + VideoDevice::VIDEO_SIZE) {
+                    cursor = VideoDevice::VIDEO_START_ADDR;
+                }
+                break;
+            
+            default:
+                if (key >= 32 && key < 127) { // Printable ASCII
+                    memory.write(cursor, (Word)key);
+                    cursor++;
+                    if (cursor >= VideoDevice::VIDEO_START_ADDR + VideoDevice::VIDEO_SIZE) {
+                        cursor = VideoDevice::VIDEO_START_ADDR;
+                    }
+                }
+                break;
+        }
     }
 }

@@ -5,13 +5,13 @@ project(system-virtual-machine)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Uključivanje header fajlova
+# Ukljucivanje header fajlova
 include_directories(include)
 
-# Pronalaženje svih source fajlova u src folderu
+# Pronalazenje svih source fajlova u src folderu
 file(GLOB SOURCES "src/*.cpp")
 
-# Kreiranje izvršnog fajla (vm.exe)
+# Kreiranje izvrsnog fajla (vm.exe)
 add_executable(vm ${SOURCES})
 
 add_custom_target(run

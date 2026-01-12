@@ -8,8 +8,8 @@
  * 
  * Testira:
  * - ADD, SUB, MUL
- * - Logičke operacije: AND, ORA, XOR
- * - Poređenja: GTU, GTS, LTU, LTS, EQU
+ * - Logicke operacije: AND, ORA, XOR
+ * - Poredjenja: GTU, GTS, LTU, LTS, EQU
  * 
  * Kako pokrenuti:
  * cd build
@@ -18,7 +18,7 @@
  */
 
 int main() {
-    std::cout << "========== TEST 2: Aritmetičke instrukcije ==========" << std::endl;
+    std::cout << "========== TEST 2: Aritmeticke instrukcije ==========" << std::endl;
     
     Memory mem;
     CPU cpu(mem);
@@ -33,11 +33,11 @@ int main() {
     cpu.R[2] = cpu.R[0] + cpu.R[1];
     
     std::cout << "R[0] = " << cpu.R[0] << ", R[1] = " << cpu.R[1] << std::endl;
-    std::cout << "R[2] = R[0] + R[1] = " << cpu.R[2] << " (očekuje: 150)" << std::endl;
+    std::cout << "R[2] = R[0] + R[1] = " << cpu.R[2] << " (ocekuje: 150)" << std::endl;
     if (cpu.R[2] == 150) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2b: SUB
@@ -49,11 +49,11 @@ int main() {
     cpu.R[2] = cpu.R[0] - cpu.R[1];
     
     std::cout << "R[0] = " << cpu.R[0] << ", R[1] = " << cpu.R[1] << std::endl;
-    std::cout << "R[2] = R[0] - R[1] = " << cpu.R[2] << " (očekuje: 70)" << std::endl;
+    std::cout << "R[2] = R[0] - R[1] = " << cpu.R[2] << " (ocekuje: 70)" << std::endl;
     if (cpu.R[2] == 70) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2c: MUL
@@ -65,11 +65,11 @@ int main() {
     cpu.R[2] = cpu.R[0] * cpu.R[1];
     
     std::cout << "R[0] = " << cpu.R[0] << ", R[1] = " << cpu.R[1] << std::endl;
-    std::cout << "R[2] = R[0] * R[1] = " << cpu.R[2] << " (očekuje: 84)" << std::endl;
+    std::cout << "R[2] = R[0] * R[1] = " << cpu.R[2] << " (ocekuje: 84)" << std::endl;
     if (cpu.R[2] == 84) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2d: AND
@@ -83,11 +83,11 @@ int main() {
     std::cout << "R[0] = 0b" << std::bitset<16>(cpu.R[0]) << " (" << cpu.R[0] << ")" << std::endl;
     std::cout << "R[1] = 0b" << std::bitset<16>(cpu.R[1]) << " (" << cpu.R[1] << ")" << std::endl;
     std::cout << "R[2] = R[0] & R[1] = 0b" << std::bitset<16>(cpu.R[2]) << " (" << cpu.R[2] 
-              << ", očekuje: 10)" << std::endl;
+              << ", ocekuje: 10)" << std::endl;
     if (cpu.R[2] == 10) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2e: ORA
@@ -101,11 +101,11 @@ int main() {
     std::cout << "R[0] = 0b" << std::bitset<16>(cpu.R[0]) << " (" << cpu.R[0] << ")" << std::endl;
     std::cout << "R[1] = 0b" << std::bitset<16>(cpu.R[1]) << " (" << cpu.R[1] << ")" << std::endl;
     std::cout << "R[2] = R[0] | R[1] = 0b" << std::bitset<16>(cpu.R[2]) << " (" << cpu.R[2] 
-              << ", očekuje: 14)" << std::endl;
+              << ", ocekuje: 14)" << std::endl;
     if (cpu.R[2] == 14) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2f: XOR
@@ -119,11 +119,11 @@ int main() {
     std::cout << "R[0] = 0b" << std::bitset<16>(cpu.R[0]) << " (" << cpu.R[0] << ")" << std::endl;
     std::cout << "R[1] = 0b" << std::bitset<16>(cpu.R[1]) << " (" << cpu.R[1] << ")" << std::endl;
     std::cout << "R[2] = R[0] ^ R[1] = 0b" << std::bitset<16>(cpu.R[2]) << " (" << cpu.R[2] 
-              << ", očekuje: 6)" << std::endl;
+              << ", ocekuje: 6)" << std::endl;
     if (cpu.R[2] == 6) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2g: EQU (Equal)
@@ -135,11 +135,11 @@ int main() {
     cpu.R[2] = (cpu.R[0] == cpu.R[1]) ? 1 : 0;
     
     std::cout << "R[0] = " << cpu.R[0] << ", R[1] = " << cpu.R[1] << std::endl;
-    std::cout << "R[2] = (R[0] == R[1]) = " << cpu.R[2] << " (očekuje: 1)" << std::endl;
+    std::cout << "R[2] = (R[0] == R[1]) = " << cpu.R[2] << " (ocekuje: 1)" << std::endl;
     if (cpu.R[2] == 1) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2h: GTU (Greater Than Unsigned)
@@ -151,11 +151,11 @@ int main() {
     cpu.R[2] = (cpu.R[0] > cpu.R[1]) ? 1 : 0;
     
     std::cout << "R[0] = " << cpu.R[0] << ", R[1] = " << cpu.R[1] << std::endl;
-    std::cout << "R[2] = (R[0] > R[1]) = " << cpu.R[2] << " (očekuje: 1)" << std::endl;
+    std::cout << "R[2] = (R[0] > R[1]) = " << cpu.R[2] << " (ocekuje: 1)" << std::endl;
     if (cpu.R[2] == 1) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
     // TEST 2i: LTU (Less Than Unsigned)
@@ -167,14 +167,14 @@ int main() {
     cpu.R[2] = (cpu.R[0] < cpu.R[1]) ? 1 : 0;
     
     std::cout << "R[0] = " << cpu.R[0] << ", R[1] = " << cpu.R[1] << std::endl;
-    std::cout << "R[2] = (R[0] < R[1]) = " << cpu.R[2] << " (očekuje: 1)" << std::endl;
+    std::cout << "R[2] = (R[0] < R[1]) = " << cpu.R[2] << " (ocekuje: 1)" << std::endl;
     if (cpu.R[2] == 1) {
-        std::cout << "✓ PASS" << std::endl;
+        std::cout << "PASS" << std::endl;
     } else {
-        std::cout << "✗ FAIL" << std::endl;
+        std::cout << "FAIL" << std::endl;
     }
     
-    std::cout << "\n========== TESTIRANJE ZAVRŠENO ==========" << std::endl;
+    std::cout << "\n========== TESTIRANJE ZAVRSENO ==========" << std::endl;
     
     return 0;
 }

@@ -4,7 +4,7 @@
 
 class VideoDevice {
 public:
-    // Video memorija počinje na adresi 8192
+    // Video memorija pocinje na adresi 8192
     static const Word VIDEO_START_ADDR = 8192;
     static const int ROWS = 25;
     static const int COLS = 80;
@@ -18,19 +18,19 @@ public:
     VideoDevice();
     ~VideoDevice();
     
-    // Inicijalizacija konzole (poziva se jednom na početku)
+    // Inicijalizacija konzole (poziva se jednom na pocetku)
     void init();
     
     // Postavi kursor na poziciju (red, kolona)
     void setCursor(int row, int col);
     
-    // Ispiši karakter na poziciju (izračunatu iz adrese)
+    // Ispisi karakter na poziciju (izracunatu iz adrese)
     void writeChar(Word address, Word value);
     
-    // Obriši ekran
+    // Obrisi ekran
     void clearScreen();
     
-    // Pomoćne funkcije
+    // Pomocne funkcije
     static int addressToRow(Word address);
     static int addressToCol(Word address);
 };

@@ -8,8 +8,8 @@
 class Memory {
 private:
     std::vector<Word> data;
-    DiskDevice disk;    // Disk uređaj
-    VideoDevice video;  // Video uređaj (80x25)
+    DiskDevice disk;    // Disk uredjaj
+    VideoDevice video;  // Video uredjaj (80x25)
 
 public:
     Memory();

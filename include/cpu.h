@@ -8,13 +8,13 @@ public:
     bool interruptsEnabled = false;
     bool interruptPending = false;
     uint32_t tickCount = 0;
-    void handleInterrupt(); // Metoda koja vrši skok na ISR
+    void handleInterrupt(); // Metoda koja vrsi skok na ISR
     
     // SVEU16 ima 16 registara (R0-R15)
     // R15 se koristi kao Program Counter (PC)
     Word R[16];
     
-    // FLAGS i SP možemo zadržati za specifične operacije, ali Forth koristi R2 za Data Stack i R3 za Return Stack
+    // FLAGS i SP mozemo zadrzati za specificne operacije, ali Forth koristi R2 za Data Stack i R3 za Return Stack
     Word FLAGS;
 
     Memory& memory;

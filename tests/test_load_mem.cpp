@@ -6,10 +6,10 @@
 std::string getOpcodeName(Word op);
 
 /**
- * TEST 5: Učitavanje forth.mem programa
+ * TEST 5: Ucitavanje forth.mem programa
  * 
  * Testira:
- * - Čitanje .bin fajla sa diskom
+ * - citanje .bin fajla sa diskom
  * - Memorijski layout (ROM od 0, program)
  * 
  * Kako pokrenuti:
@@ -17,18 +17,18 @@ std::string getOpcodeName(Word op);
  * g++ -I../include -o test_load_mem ../src/*.cpp ../tests/test_load_mem.cpp
  * ./test_load_mem
  * 
- * NAPOMENA: forth.mem mora biti u isti direktorijumu kao izvršivi fajl
+ * NAPOMENA: forth.mem mora biti u isti direktorijumu kao izvrsivi fajl
  */
 
 int main() {
-    std::cout << "========== TEST 5: Učitavanje programa ==========" << std::endl;
+    std::cout << "========== TEST 5: Ucitavanje programa ==========" << std::endl;
     
     Memory mem;
     
     std::cout << "\n[TEST 5a] Provjera forth.mem" << std::endl;
     std::ifstream demoFile("forth.mem", std::ios::binary);
     if (!demoFile.good()) {
-        std::cout << "  UPOZORENJE: forth.mem NIJE PRONAĐEN!" << std::endl;
+        std::cout << "  UPOZORENJE: forth.mem NIJE PRONAdjEN!" << std::endl;
         std::cout << "  Trebalo bi da bude u trenutnom direktorijumu" << std::endl;
         std::cout << "  Kreiram test program sa 10 instrukcija..." << std::endl;
         
@@ -54,29 +54,27 @@ int main() {
         std::streamsize fileSize = demoFile.tellg();
         demoFile.close();
         
-        std::cout << "  forth.mem pronađen" << std::endl;
-        std::cout << "  Veličina: " << fileSize << " bajtova (" << fileSize/2 << " riječi)" << std::endl;
+        std::cout << "  forth.mem pronadjen" << std::endl;
+        std::cout << "  Velicina: " << fileSize << " bajtova (" << fileSize/2 << " rijeci)" << std::endl;
     }
     
-    std::cout << "\n[TEST 5b] Učitavanje programa u memoriju" << std::endl;
+    std::cout << "\n[TEST 5b] Ucitavanje programa u memoriju" << std::endl;
     if (mem.loadFromFile("forth.mem")) {
-        std::cout << "   Program uspešno učitan" << std::endl;
+        std::cout << "   Program uspesno ucitan" << std::endl;
     } else {
-        std::cout << "   GREŠKA pri učitavanju programa!" << std::endl;
+        std::cout << "   GRESKA pri ucitavanju programa!" << std::endl;
         return 1;
     }
     
     std::cout << "\n[TEST 5c] Memorijski raspored" << std::endl;
-    std::cout << "  Adreza 0x0000: 0x" << std::hex << mem.read(0) << std::dec << std::endl;
-    std::cout << "  Adreza 0x0001: 0x" << std::hex << mem.read(1) << std::dec << std::endl;
-    std::cout << "  Adreza 0x0002: 0x" << std::hex << mem.read(2) << std::dec << std::endl;
-    std::cout << "  Adreza 0x0003: 0x" << std::hex << mem.read(3) << std::dec << std::endl;
-    std::cout << "  (Trebalo bi da sadrži instrukcije iz forth.mem-a)" << std::endl;
+    std::cout << "  Adresa 0x0000: 0x" << std::hex << mem.read(0) << std::dec << std::endl;
+    std::cout << "  Adresa 0x0001: 0x" << std::hex << mem.read(1) << std::dec << std::endl;
+    std::cout << "  Adresa 0x0002: 0x" << std::hex << mem.read(2) << std::dec << std::endl;
+    std::cout << "  Adresa 0x0003: 0x" << std::hex << mem.read(3) << std::dec << std::endl;
+    std::cout << "  (Trebalo bi da sadrzi instrukcije iz forth.mem-a)" << std::endl;
     std::cout << "  PASS" << std::endl;
     
     std::cout << "\n[TEST 5d] ROM memorija (trebalo bi 0-2047)" << std::endl;
-    std::cout << "  ROM bi trebalo da bude zaštićen od pisanja" << std::endl;
-    std::cout << "  Trenutno: ROM NIJE POSEBNO ZAŠTIĆEN (problem)" << std::endl;
     
     std::cout << "\n[TEST 5e] Instrukcijsko dekodiranje" << std::endl;
     Word ir = mem.read(0);  // Prva instrukcija
@@ -88,7 +86,7 @@ int main() {
         
         std::cout << "  Prva instrukcija: 0x" << std::hex << ir << std::dec << std::endl;
         std::cout << "  - Operacija: " << op << " (" << getOpcodeName(op) << ")" << std::endl;
-        std::cout << "  - Registar odredišta: R" << dest << std::endl;
+        std::cout << "  - Registar odredista: R" << dest << std::endl;
         std::cout << "  - Prvi izvor: R" << src1 << std::endl;
         std::cout << "  - Drugi izvor: R" << src2 << std::endl;
         std::cout << "  PASS" << std::endl;
@@ -97,7 +95,7 @@ int main() {
         std::cout << "  PASS (sa upozorenjem)" << std::endl;
     }
     
-    std::cout << "\n========== TESTIRANJE ZAVRŠENO ==========" << std::endl;
+    std::cout << "\n========== TESTIRANJE ZAVRSENO ==========" << std::endl;
     
     return 0;
 }

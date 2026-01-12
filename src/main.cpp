@@ -12,7 +12,7 @@ int main() {
     
     Memory mem;
     
-    // Učitaj forth.mem
+    // Ucitaj forth.mem
     std::ifstream forth_file;
     const char* paths[] = {
         "forth.mem",
@@ -27,27 +27,27 @@ int main() {
     for (const char* path : paths) {
         forth_file.open(path, std::ios::binary);
         if (forth_file.is_open()) {
-            std::cout << "Učitavam forth.mem sa: " << path << std::endl;
+            std::cout << "Ucitavam forth.mem sa: " << path << std::endl;
             opened = true;
             break;
         }
     }
     
     if (!opened) {
-        std::cerr << "Greška: forth.mem nije pronađen!" << std::endl;
-        std::cerr << "Pokušani putevi:" << std::endl;
+        std::cerr << "Greska: forth.mem nije pronadjen u zadatim putanjama!" << std::endl;
+        std::cerr << "Putanje koje su pokusane:" << std::endl;
         for (const char* path : paths) {
             std::cerr << "  - " << path << std::endl;
         }
         return 1;
     }
     
-    // Učitaj forth.mem direktno u memoriju (zaobilazi ROM zaštitu)
+    // Ucitaj forth.mem direktno u memoriju (zaobilazi ROM zastitu)
     // NAPOMENA: forth.mem iz asemblera je u LITTLE-ENDIAN formatu!
     Word* raw_mem = mem.getRawPointer(0);
     unsigned short address = 0;
     
-    // Čitaj bajt po bajt i sastavi riječi (little-endian)
+    // citaj bajt po bajt i sastavi rijeci (little-endian)
     unsigned char byte_buffer[2];
     while (forth_file.read(reinterpret_cast<char*>(byte_buffer), 2) && address < 65536) {
         // Little-endian: nizak bajt prvi, visok bajt drugi
@@ -56,9 +56,10 @@ int main() {
     }
     forth_file.close();
     
-    std::cout << "forth.mem učitan (" << address << " riječi)" << std::endl;
+    std::cout << "forth.mem ucitan (" << address << " rijeci)" << std::endl;
     
-    // DEBUG: Ispiši prve instrukcije
+    /*
+    // DEBUG: Ispisi prve instrukcije
     std::cout << "\n=== DEBUG: Prve instrukcije u memoriji ===" << std::endl;
     for (int i = 0; i < 20; i++) {
         Word instr = raw_mem[i];
@@ -69,8 +70,9 @@ int main() {
         std::cout << "0x" << std::hex << i << ": 0x" << instr << std::dec;
         std::cout << " (op=" << op << " dest=R" << dest << " src1=R" << src1 << " src2=R" << src2 << ")" << std::endl;
     }
+    */
     std::cout << "==========================================\n" << std::endl;
-    std::cout << "\n=== SVEU16 Sistemska Virtualna Mašina ===" << std::endl;
+    std::cout << "\n=== SVEU16 Sistemska Virtualna Masina ===" << std::endl;
     std::cout << "Frekvencija: 1 MHz" << std::endl;
     std::cout << "Interapti: Svakih 20ms" << std::endl;
     std::cout << "Video memorija: 80x25 @ 0x2000" << std::endl;
@@ -82,15 +84,15 @@ int main() {
     CPU cpu(mem);
     Keyboard keyboard(mem);
     
-    std::cout << "FORTH pokrenut. Čeka se inicijalizacija..." << std::endl;
-    std::cout << "Možete početi pisati komande nakon poruke 'ok'.\n" << std::endl;
+    // Obriši konzolu prije nego što FORTH počne
+    system("cls");
     
     // Pokreni CPU u posebnoj niti
     std::thread cpuThread([&cpu]() {
         cpu.run();
     });
     
-    // Glavna petlja - samo čekaj (tastatura se čita kroz GetAsyncKeyState)
+    // Glavna petlja - samo cekaj (tastatura se cita kroz GetAsyncKeyState)
     while (cpu.running) {
         keyboard.processInput();
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

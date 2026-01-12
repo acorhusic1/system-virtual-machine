@@ -12,7 +12,7 @@ DiskDevice::DiskDevice() : DiskDevice("disk.img") {
 DiskDevice::DiskDevice(const std::string& filename) 
     : diskFileName(filename), currentSector(0), bufferIndex(0), sectorLoaded(false) {
     
-    // Inicijaliziraj buffer za jedan sektor (256 riječi)
+    // Inicijaliziraj buffer za jedan sektor (256 rijeci)
     sectorBuffer.resize(SECTOR_SIZE, 0);
     
     // Osiguraj da disk fajl postoji
@@ -20,7 +20,7 @@ DiskDevice::DiskDevice(const std::string& filename)
 }
 
 // ============================================================================
-// RESET - Vraća kontroler u početno stanje
+// RESET - Vraca kontroler u pocetno stanje
 // ============================================================================
 
 void DiskDevice::reset() {
@@ -31,7 +31,7 @@ void DiskDevice::reset() {
 }
 
 // ============================================================================
-// WRITE PORT - CPU piše na disk portove
+// WRITE PORT - CPU pise na disk portove
 // ============================================================================
 
 void DiskDevice::writePort(Word port, Word value) {
@@ -45,19 +45,19 @@ void DiskDevice::writePort(Word port, Word value) {
                     break;
                     
                 case CMD_READ:
-                    // Učitaj odabrani sektor u buffer
+                    // Ucitaj odabrani sektor u buffer
                     loadSector();
-                    bufferIndex = 0;  // Resetuj index za čitanje
+                    bufferIndex = 0;  // Resetuj index za citanje
                     break;
                     
                 case CMD_WRITE:
                     // Spremi buffer na disk
                     saveSector();
-                    bufferIndex = 0;  // Resetuj index za sljedeću operaciju
+                    bufferIndex = 0;  // Resetuj index za sljedecu operaciju
                     break;
                     
                 default:
-                    // Nepoznata komanda: tiho ignoriraj (može biti normalno pri inicijalizaciji)
+                    // Nepoznata komanda: tiho ignoriraj (moze biti normalno pri inicijalizaciji)
                     break;
             }
             break;
@@ -66,7 +66,7 @@ void DiskDevice::writePort(Word port, Word value) {
         case PORT_SECTOR:
             if (value < TOTAL_SECTORS) {
                 currentSector = value;
-                sectorLoaded = false;  // Novi sektor, treba učitati
+                sectorLoaded = false;  // Novi sektor, treba ucitati
                 bufferIndex = 0;
             } else {
                 std::cerr << "[DISK] Neispravan sektor: " << value << std::endl;
@@ -86,26 +86,26 @@ void DiskDevice::writePort(Word port, Word value) {
 }
 
 // ============================================================================
-// READ PORT - CPU čita sa disk portova
+// READ PORT - CPU cita sa disk portova
 // ============================================================================
 
 Word DiskDevice::readPort(Word port) {
     switch (port) {
         
-        // PORT 0xFFFC: Čitanje podataka iz buffera
+        // PORT 0xFFFC: citanje podataka iz buffera
         case PORT_DATA:
             if (sectorLoaded && bufferIndex < SECTOR_SIZE) {
                 return sectorBuffer[bufferIndex++];
             }
             return 0;
         
-        // PORT 0xFFFD: Vraća trenutni sektor (za dijagnostiku)
+        // PORT 0xFFFD: Vraca trenutni sektor (za dijagnostiku)
         case PORT_SECTOR:
             return currentSector;
             
-        // PORT 0xFFFE: Vraća status (0 = spreman)
+        // PORT 0xFFFE: Vraca status (0 = spreman)
         case PORT_CMD:
-            return 0;  // Uvijek spreman (nema emulacije kašnjenja)
+            return 0;  // Uvijek spreman (nema emulacije kasnjenja)
             
         default:
             return 0;
@@ -113,7 +113,7 @@ Word DiskDevice::readPort(Word port) {
 }
 
 // ============================================================================
-// LOAD SECTOR - Učitaj sektor iz fajla u buffer
+// LOAD SECTOR - Ucitaj sektor iz fajla u buffer
 // ============================================================================
 
 void DiskDevice::loadSector() {
@@ -126,11 +126,11 @@ void DiskDevice::loadSector() {
         return;
     }
     
-    // Izračunaj poziciju u fajlu (sektor * veličina sektora u bajtovima)
+    // Izracunaj poziciju u fajlu (sektor * velicina sektora u bajtovima)
     long offset = currentSector * SECTOR_SIZE * sizeof(Word);
     file.seekg(offset, std::ios::beg);
     
-    // Pročitaj sektor u buffer
+    // Procitaj sektor u buffer
     file.read(reinterpret_cast<char*>(sectorBuffer.data()), SECTOR_SIZE * sizeof(Word));
     
     file.close();
@@ -142,7 +142,7 @@ void DiskDevice::loadSector() {
 // ============================================================================
 
 void DiskDevice::saveSector() {
-    // Otvori fajl za čitanje i pisanje (mora postojati)
+    // Otvori fajl za citanje i pisanje (mora postojati)
     std::fstream file(diskFileName, std::ios::binary | std::ios::in | std::ios::out);
     
     if (!file) {
@@ -150,11 +150,11 @@ void DiskDevice::saveSector() {
         return;
     }
     
-    // Izračunaj poziciju u fajlu
+    // Izracunaj poziciju u fajlu
     long offset = currentSector * SECTOR_SIZE * sizeof(Word);
     file.seekp(offset, std::ios::beg);
     
-    // Zapiši buffer u fajl
+    // Zapisi buffer u fajl
     file.write(reinterpret_cast<char*>(sectorBuffer.data()), SECTOR_SIZE * sizeof(Word));
     
     file.close();
@@ -169,7 +169,7 @@ void DiskDevice::ensureDiskFileExists() {
     std::ifstream checkFile(diskFileName, std::ios::binary);
     if (checkFile.good()) {
         checkFile.close();
-        return;  // Fajl već postoji
+        return;  // Fajl vec postoji
     }
     
     // Kreiraj novi prazan disk fajl

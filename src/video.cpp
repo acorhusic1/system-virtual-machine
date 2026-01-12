@@ -16,15 +16,15 @@ void VideoDevice::init() {
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     
     if (hConsole == INVALID_HANDLE_VALUE) {
-        std::cerr << "[VIDEO] Greška: Ne mogu dobiti handle konzole!" << std::endl;
+       // std::cerr << "[VIDEO] Greska: Ne mogu dobiti handle konzole!" << std::endl;
         return;
     }
     
-    // Postavi veličinu prozora konzole na 80x25
+    // Postavi velicinu prozora konzole na 80x25
     SMALL_RECT windowSize = {0, 0, COLS - 1, ROWS - 1};
     SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
     
-    // Postavi veličinu buffera na 80x25
+    // Postavi velicinu buffera na 80x25
     COORD bufferSize = {COLS, ROWS};
     SetConsoleScreenBufferSize(hConsole, bufferSize);
     
@@ -34,7 +34,7 @@ void VideoDevice::init() {
     cursorInfo.bVisible = FALSE;
     SetConsoleCursorInfo(hConsole, &cursorInfo);
     
-    // Obriši ekran na početku
+    // Obrisi ekran na pocetku
     clearScreen();
     
     initialized = true;
@@ -59,41 +59,27 @@ void VideoDevice::writeChar(Word address, Word value) {
         return;
     }
     
-    // Inicijaliziraj ako nije već
+    // Inicijaliziraj ako nije vec
     if (!initialized) {
         init();
     }
     
-    // DEBUG: Ispiši prvih nekoliko upisa
-    static int write_count = 0;
-    if (write_count < 50) {
-        std::cerr << "[VIDEO] Pisanje na adresu 0x" << std::hex << address 
-                  << " vrijednost 0x" << value << " ('" << (char)(value >= 32 && value < 127 ? value : '?') 
-                  << "')" << std::dec << std::endl;
-        write_count++;
-    }
-    
-    // Izračunaj poziciju
+    // Izracunaj poziciju
     int row = addressToRow(address);
     int col = addressToCol(address);
     
     // Postavi kursor na tu poziciju
     setCursor(row, col);
     
-    // Ispiši karakter DIREKTNO u konzolu
+    // Ispisi karakter DIREKTNO u konzolu sa std::cout
     if (value >= 32 && value < 127) {
         // Printable ASCII
         std::cout << (char)value << std::flush;
     } else if (value == 0 || value == 32) {
         // Prazno (space)
         std::cout << ' ' << std::flush;
-    } else if (value == 10) {
-        // Line feed - prijeđi u novi red
-        std::cout << std::endl;
-    } else if (value == 13) {
-        // Carriage return - vrati se na početak reda
-        std::cout << '\r' << std::flush;
     }
+    // Line feed i Carriage return se ignorišu u grid modu
 }
 
 void VideoDevice::clearScreen() {
@@ -111,7 +97,7 @@ void VideoDevice::clearScreen() {
         FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,  // Bijela boja
         consoleSize, topLeft, &written);
     
-    // Vrati kursor na početak
+    // Vrati kursor na pocetak
     SetConsoleCursorPosition(hConsole, topLeft);
 }
 

@@ -25,7 +25,7 @@ public:
     static const Word CMD_READ = 1;
     static const Word CMD_WRITE = 2;
     
-    // Specifikacija: Disk je 256 sektora, svaki sektor 256 riječi
+    // Specifikacija: Disk je 256 sektora, svaki sektor 256 rijeci
     static const int SECTOR_SIZE = 256;
     static const int TOTAL_SECTORS = 256;
     
